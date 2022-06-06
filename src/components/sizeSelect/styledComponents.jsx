@@ -16,6 +16,8 @@ export const SizesWrapper = styled.div`
 export const SingleSize = styled.div`
   width: ${props=>props.dropdown ? 'auto' : '63px'};
   height: ${props=>props.dropdown ? 'auto' : '45px'};
+  min-width: 24px;
+  min-height: 24px;
   border: 1px solid ${props => props.theme.colors.textColor};
   display: flex;
   justify-content: center;
