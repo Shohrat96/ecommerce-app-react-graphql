@@ -30,6 +30,7 @@ export const ProductCount = styled.div`
   margin-right: 24px;
 `
 export const PlusMinusButton = styled.div`
+  font-size: 30px;
   width: 45px;
   height: 45px;
   border: 1px solid ${props => props.theme.colors.textColor};

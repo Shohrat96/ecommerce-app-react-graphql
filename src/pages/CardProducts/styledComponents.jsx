@@ -8,6 +8,7 @@ export const Title = styled.p`
   font-weight: 400;
   font-size: 42px;
   line-height: 67px;
+  margin-bottom: 55px;
 `;
 export const ListWrapper = styled.div`
   display: flex;

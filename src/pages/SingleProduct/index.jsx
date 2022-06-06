@@ -17,7 +17,6 @@ import {
   SelectedImage,
   DetailsWrapper,
 } from "./styledComponents";
-import parse from 'html-react-parser';
 import DOMPurify from "dompurify";
 
 class SingleProduct extends React.Component {
