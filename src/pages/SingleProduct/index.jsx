@@ -18,6 +18,7 @@ import {
   DetailsWrapper,
 } from "./styledComponents";
 import parse from 'html-react-parser';
+import DOMPurify from "dompurify";
 
 class SingleProduct extends React.Component {
   state = {
@@ -132,9 +133,9 @@ class SingleProduct extends React.Component {
                   title="add to card"
                   className="addToCardBtnStyles"
                 />
-                {
-                  parse(product?.description)
-                }
+                <div dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(product?.description)
+                }} />
               </DetailsWrapper>
             </Container>
           );
