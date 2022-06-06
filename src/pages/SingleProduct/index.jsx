@@ -5,10 +5,11 @@ import CustomBtn from "../../components/customBtn";
 import PriceText from "../../components/priceText";
 import TitleAndSubtitle from "../../components/titleAndSubtitle";
 import CurrencyContext from "../../context/currency";
+import NavigationContext from "../../context/navigation";
 import ProductsContext from "../../context/products";
 import { GET_SINGLE_PRODUCT } from "../../graphql/queries";
 import { convertPrice } from "../../utils/helpers";
-
+import "./customStyles.css";
 import {
   Container,
   OtherImages,
@@ -16,43 +17,59 @@ import {
   SelectedImage,
   DetailsWrapper,
 } from "./styledComponents";
+import parse from 'html-react-parser';
 
 class SingleProduct extends React.Component {
-  state = {};
+  state = {
+    attributes: {},
+    shownImageUrlIdx: 0,
+  };
   attributeSelectHandler = (attributeName, itemId) => {
     this.setState((prevState) => ({
       ...prevState,
-      [attributeName]: itemId,
+      attributes: {
+        ...this.state.attributes,
+        [attributeName]: itemId,
+      },
     }));
   };
+  addToCardHandler = (product) => {
+    const thisItemInProduct = this.props.cardProducts.find((prod) => {
+      const prodCopy = JSON.parse(JSON.stringify(prod));
+      if ("count" in prodCopy) delete prodCopy.count;
+      if (
+        JSON.stringify(prodCopy) ===
+        JSON.stringify({
+          ...product,
+          ...this.state.attributes,
+        })
+      ) {
+        return true;
+      }
+      return false;
+    });
 
+    if (thisItemInProduct) {
+      this.props.incrementCardProduct(thisItemInProduct);
+    } else {
+      this.props.addToCard({
+        ...product,
+        ...this.state.attributes,
+      });
+    }
+    this.setState({
+      attributes: {},
+    });
+  };
   addToCardButtonDisabled = (fetchedProduct) => {
     if (fetchedProduct.attributes.length > 0) {
-      if (fetchedProduct.attributes.some((att) => !this.state[att?.name]))
+      if (
+        fetchedProduct.attributes.some(
+          (att) => !this.state.attributes[att?.name]
+        )
+      )
         return true;
     }
-    const thisProductsInCard = this.props.cardProducts.filter(
-      (product) => product.id === fetchedProduct.id
-    );
-    if (thisProductsInCard.length > 0) {
-      const thisProductSelectedAttributes = {};
-
-      fetchedProduct.attributes.forEach((item) => {
-        thisProductSelectedAttributes[item.name] = thisProductsInCard.map(
-          (prod) => prod[item.name]
-        );
-      });
-
-      const updatedAttributeFields = Object.keys(this.state).filter((attr) => {
-        if (!thisProductSelectedAttributes[attr].includes(this.state[attr])) {
-          return true;
-        }
-      });
-      if (updatedAttributeFields.length > 0) {
-        return false;
-      } else return true;
-    }
-    return false;
   };
   render() {
     return (
@@ -73,9 +90,16 @@ class SingleProduct extends React.Component {
             <Container>
               {product?.gallery?.length > 0 && (
                 <OtherImages>
-                  {product.gallery.map((imgUrl) => {
+                  {product.gallery.map((imgUrl, idx) => {
                     return (
-                      <SingleImageWrapper key={imgUrl}>
+                      <SingleImageWrapper
+                        onClick={() =>
+                          this.setState({
+                            shownImageUrlIdx: idx,
+                          })
+                        }
+                        key={imgUrl}
+                      >
                         <img src={imgUrl} alt="product img" />
                       </SingleImageWrapper>
                     );
@@ -83,38 +107,34 @@ class SingleProduct extends React.Component {
                 </OtherImages>
               )}
               <SelectedImage>
-                <img src={product?.gallery[0]} alt="selected product img" />
+                <img
+                  src={product?.gallery[this.state.shownImageUrlIdx]}
+                  alt="selected product img"
+                />
               </SelectedImage>
               <DetailsWrapper>
-                <div style={{marginBottom: '43px'}}>
-                  <TitleAndSubtitle
-                    title={product?.brand}
-                    subtitle={product?.name}
-                  />
-                </div>
+                <TitleAndSubtitle
+                  title={product?.brand}
+                  subtitle={product?.name}
+                />
 
                 <Attributes
                   attributes={product.attributes}
                   onSelect={this.attributeSelectHandler}
-                  selectedAttributes={this.state}
+                  selectedAttributes={this.state.attributes}
                 />
-                <div style={{marginTop: '36px', marginBottom: '20px'}}>
-                  <PriceText cur={price?.currencySymbol} value={price?.amount} />
-                </div>
+                <PriceText cur={price?.currencySymbol} value={price?.amount} />
                 <CustomBtn
                   disabled={this.addToCardButtonDisabled(product)}
-                  onClick={() =>
-                    this.props.addToCard({
-                      ...product,
-                      ...this.state,
-                    })
+                  onClick={
+                    () => this.addToCardHandler(product)
                   }
                   title="add to card"
+                  className="addToCardBtnStyles"
                 />
-                <div
-                  style={{marginTop: '40px'}}
-                  dangerouslySetInnerHTML={{ __html: product?.description }}
-                />
+                {
+                  parse(product?.description)
+                }
               </DetailsWrapper>
             </Container>
           );
@@ -127,22 +147,28 @@ class SingleProduct extends React.Component {
 export default class SingleProductWithContexts extends React.Component {
   render() {
     return (
-      <ProductsContext.Consumer>
-        {({ cardProducts, addToCard }) => (
-          <CurrencyContext.Consumer>
-            {({ activeCurrency }) => {
-              return (
-                <SingleProduct
-                  cardProducts={cardProducts}
-                  activeCurrency={activeCurrency}
-                  addToCard={addToCard}
-                  {...this.props}
-                />
-              );
-            }}
-          </CurrencyContext.Consumer>
+      <NavigationContext.Consumer>
+        {({ setActiveNavName }) => (
+          <ProductsContext.Consumer>
+            {({ cardProducts, addToCard, incrementCardProduct }) => (
+              <CurrencyContext.Consumer>
+                {({ activeCurrency }) => {
+                  return (
+                    <SingleProduct
+                      cardProducts={cardProducts}
+                      activeCurrency={activeCurrency}
+                      addToCard={addToCard}
+                      incrementCardProduct={incrementCardProduct}
+                      setActiveNavName={setActiveNavName}
+                      {...this.props}
+                    />
+                  );
+                }}
+              </CurrencyContext.Consumer>
+            )}
+          </ProductsContext.Consumer>
         )}
-      </ProductsContext.Consumer>
+      </NavigationContext.Consumer>
     );
   }
 }

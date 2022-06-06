@@ -5,7 +5,9 @@ const NavigationContext = React.createContext()
 class NavigationProvider extends Component {
   // Context state
   state={
-    activeNavName: 'all' //possible [all, tech, clothes]
+    activeNavName: localStorage.getItem("navigation")
+    ? JSON.parse(localStorage.getItem("navigation"))
+    : 'all', //possible [all, tech, clothes, productId]
   }
 
   // products actions
@@ -16,6 +18,12 @@ class NavigationProvider extends Component {
         activeNavName: name,
       }
     ))
+  }
+  componentDidUpdate() {
+    localStorage.setItem(
+      "navigation",
+      JSON.stringify(this.state.activeNavName)
+    );
   }
 
   render() {

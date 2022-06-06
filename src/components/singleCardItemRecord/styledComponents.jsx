@@ -7,10 +7,17 @@ export const Container = styled.div`
   border-top: 1px solid #e5e5e5;
   padding: 24px 0;
   align-items:center;
+  &:last-of-type {
+    border-bottom: 1px solid #e5e5e5;
+  }
 `
 export const ProductInfo = styled.div`
   display: flex;
   flex-direction: column;
+  & > span {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
 `
 export const ProductCountAndImage = styled.div`
   display: flex;
@@ -38,11 +45,9 @@ export const Count = styled.div`
   color: ${props => props.theme.colors.textColor};
 `
 export const ProductImage = styled.div`
-  width: 288px;
   position: relative;
   & > img {
-    width: 100%;
-    height: 200px;
+    width: 200px;
   }
 `
 export const ImageChange = styled.div`

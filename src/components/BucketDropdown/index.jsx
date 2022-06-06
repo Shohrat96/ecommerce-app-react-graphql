@@ -11,24 +11,14 @@ import SingleDropdownRecord from "./singleRecord";
 import CurrencyContext from "../../context/currency";
 import { convertPrice } from "../../utils/helpers";
 import CustomBtn from "../customBtn";
-import uuid from 'react-uuid'
-
-const buttonStyles = {
-  width: "140px",
-  height: "43px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  fontSize: "14px",
-  padding: "0",
-};
+import uuid from "react-uuid";
 
 class BucketDropdown extends React.Component {
   componentDidMount() {
-    document.body.style.overflow = 'hidden'
+    document.body.style.overflow = "hidden";
   }
   componentWillUnmount() {
-    document.body.style.overflow = 'unset';
+    document.body.style.overflow = "unset";
   }
   render() {
     const { cardProducts } = this.props;
@@ -39,46 +29,71 @@ class BucketDropdown extends React.Component {
           convertPrice(item.prices, this.props.activeCurrency).amount
       )
       .reduce((a, b) => a + b, 0);
-    const activeCurrencySymbol = cardProducts.length > 0 ? (
-      convertPrice(cardProducts[0].prices, this.props.activeCurrency)
-    ).currencySymbol : '';
+    const activeCurrencySymbol =
+      cardProducts.length > 0
+        ? convertPrice(cardProducts[0].prices, this.props.activeCurrency)
+            .currencySymbol
+        : "";
 
     const totalCardProductsCount = cardProducts
       .map((item) => item.count)
       ?.reduce((a, b) => a + b, 0);
     return (
-      <Container onClick={(ev) => ev.stopPropagation()}>
-        <Title>
-          <span>My Bag, </span>
-          <span>{totalCardProductsCount} items</span>
-        </Title>
-        <ListWrapper>
-          {cardProducts?.map((item) => {
-            return <SingleDropdownRecord key={uuid()} item={item} />;
-          })}
-        </ListWrapper>
-        <TotalPrice>
-          <span>Total</span>
-          <span>{activeCurrencySymbol}{totalPrice.toFixed(2)}</span>
-        </TotalPrice>
-        <ButtonsWrapper>
-          <CustomBtn
-            onClick={this.props.viewBugHandler}
-            style={{
-              ...buttonStyles,
-              backgroundColor: "white",
-              color: "#000",
-              border: "1px solid #1d1f22",
-            }}
-            title="View bag"
-          />
-          <CustomBtn style={buttonStyles} title="Check out" />
-        </ButtonsWrapper>
+        <>
+          <Title>
+            <span>My Bag, </span>
+            <span>{totalCardProductsCount} items</span>
+          </Title>
+          <ListWrapper>
+            {cardProducts?.map((item) => {
+              return <SingleDropdownRecord key={uuid()} item={item} />;
+            })}
+          </ListWrapper>
+          <TotalPrice>
+            <span>Total</span>
+            <span>
+              {activeCurrencySymbol}
+              {totalPrice.toFixed(2)}
+            </span>
+          </TotalPrice>
+          <ButtonsWrapper>
+            <CustomBtn
+              onClick={this.props.viewBugHandler}
+              title="View bag"
+            />
+            <CustomBtn
+              title="Check out" 
+            />
+          </ButtonsWrapper>
+        </>
+    );
+  }
+}
+export class BucketDropDownWithOutsideClick extends React.Component {
+  constructor(props) {
+    super(props);
+    this.bucketRef = React.createRef();
+  }
+  handleOutsideClick=(event) => {
+    if (this.bucketRef.current && !this.bucketRef.current.contains(event.target)) {
+      this.props.outsideClick();
+    }
+  }
+  componentDidMount() {
+    document.addEventListener('click', this.handleOutsideClick, true)
+  }
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleOutsideClick)
+
+  }
+  render() { 
+    return (
+      <Container ref={this.bucketRef}>
+        <BucketDropdown {...this.props} />
       </Container>
     );
   }
 }
-
 export default class BucketDropdownWithContext extends React.Component {
   render() {
     return (
@@ -86,7 +101,7 @@ export default class BucketDropdownWithContext extends React.Component {
         {({ activeCurrency, currencies }) => (
           <ProductsContext.Consumer>
             {({ cardProducts }) => (
-              <BucketDropdown
+              <BucketDropDownWithOutsideClick
                 activeCurrency={activeCurrency}
                 cardProducts={cardProducts}
                 currencies={currencies}

@@ -12,17 +12,16 @@ export default withRouter(class Header extends React.Component {
   static contextType = ProductsContext;
 
   render() {
-    const { onBucketClick, showCardDropdown, onClick, hideBugDropdown } = this.props;
+    const { onBucketClick, showCardDropdown, hideBugDropdown } = this.props;
     const { cardProducts } = this.context;
     const totalCardProductsCount = cardProducts.map(item=>item.count)?.reduce((a,b) => a+b, 0);
-
     return (
-      <Container onClick={onClick}>
+      <Container>
         <Navigation {...this.props.navContext} />
         <LogoIcon/>
         <CurrencyAndBucket>
-          <CurrencySelect onClick={(e) => e.stopPropagation()} style={{marginRight: '22px'}} />
-          <BucketWrapper onClick={onBucketClick}>
+          <CurrencySelect onClick={(e) => e.stopPropagation()} />
+          <BucketWrapper onClick={() => onBucketClick()}>
             <BucketIcon/>
             {
               cardProducts?.length > 0 && (
@@ -34,9 +33,12 @@ export default withRouter(class Header extends React.Component {
         {
             showCardDropdown && (
               <BucketDropdown
+                outsideClick={() => {
+                  hideBugDropdown();
+                }}
                 viewBugHandler={() => {
                 this.props.history.push('/cart');
-                hideBugDropdown();
+                this.props.hideBugDropdown();
               }} />
             )
         }

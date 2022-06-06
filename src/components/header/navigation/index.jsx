@@ -15,7 +15,7 @@ export default withRouter(
     static contextType = ProductsContext;
 
     changeCatHandler = (category) => {
-      this.props.history.push("/");
+      this.props.history.push(`/${category}`);
       const { setProducts } = this.context;
       this.props.setActiveNavName(category);
       client
@@ -29,9 +29,7 @@ export default withRouter(
           }
         });
     };
-    componentDidMount() {
-      this.changeCatHandler(this.props.activeNavName);
-    }
+
     render() {
       const { activeNavName } = this.props;
       return (

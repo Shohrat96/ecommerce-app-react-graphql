@@ -32,7 +32,7 @@ class SingleCardItemRecord extends React.Component {
       <Container>
         <ProductInfo>
           <TitleAndSubtitle title={item.brand} subtitle={item.name} />
-          <span style={{marginTop: '20px', marginBottom: '20px'}} >{currencySymbol}{amount}</span>
+          <span>{currencySymbol}{amount}</span>
           <Attributes
             attributes={item.attributes}
             selectedAttributes={selectedAttributes}

@@ -7,11 +7,9 @@ export const Container = styled.div`
   right: -44px;
   top: 81px;
   width: 325px;
-  max-height: 677px;
-  z-index: 99;
+  z-index: 1000;
   background-color: #fff;
   padding: 32px 16px;
-  overflow-x: hidden;
 `;
 export const Title = styled.div`
 margin-bottom: 32px;
@@ -29,7 +27,9 @@ margin-bottom: 32px;
 export const ListWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  max-height: 500px;
   overflow-y: scroll;
+  margin-bottom: 30px;
 `;
 export const Overlay = styled.div`
   position: absolute;
@@ -38,6 +38,7 @@ export const Overlay = styled.div`
   top: 81px;
   bottom: 0;
   background-color: rgba(0,0,0,0.5);
+  z-index: 999;
 `
 export const TotalPrice = styled.div`
   display: flex;
@@ -58,4 +59,15 @@ export const ButtonsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 32px;
+  & > div {
+    width: 140px;
+    height: 43px;
+    font-size: 14px;
+    padding: 0;
+  }
+  & > div:first-of-type {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #1d1f22;
+  }
 `

@@ -10,7 +10,9 @@ import { NavigationProvider } from "./context/navigation";
 import { CurrencyProvider } from "./context/currency";
 export const client = new ApolloClient({
   uri: "http://localhost:4000/",
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    resultCaching: true
+  }),
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -4,7 +4,7 @@ import { Container, Content } from "./AppStyles";
 import Header from "./components/header";
 import HomePage from "./pages/Home";
 import { theme } from "./theme";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import SingleProduct from "./pages/SingleProduct";
 import NavigationContext from "./context/navigation";
 import CardProductsPage from "./pages/CardProducts";
@@ -21,13 +21,14 @@ class App extends React.Component {
       <ThemeProvider theme={theme}>
         <Container>
           <Header
-            showCardDropdown={this.state.showCardDropdown}
-            onClick={() => {
-              this.setState({ showCardDropdown: false });
+            hideBugDropdown={() => {
+              this.setState((prevState) => ({
+                ...prevState,
+                showCardDropdown: false,
+              }));
             }}
-            hideBugDropdown={() => this.setState({showCardDropdown: false})}
-            onBucketClick={(ev) => {
-              ev.stopPropagation();
+            showCardDropdown={this.state.showCardDropdown}
+            onBucketClick={() => {
               this.setState({
                 showCardDropdown: true,
               });
@@ -35,23 +36,22 @@ class App extends React.Component {
             navContext={this.context}
           />
           <Content>
-            <Route
-              path="/"
-              exact
-              component={(props) => (
-                <HomePage categoryName={activeNavName} {...props} />
-              )}
-            />
-            <Route
-              path="/products/:id"
-              component={(props) => <SingleProduct {...props} />}
-            />
-            <Route path="/cart" component={() => <CardProductsPage />} />
-            {this.state.showCardDropdown && (
-              <Overlay
-                onClick={() => this.setState({ showCardDropdown: false })}
+            <Switch>
+              <Route
+                path="/products/:id"
+                component={(props) => <SingleProduct {...props} />}
               />
-            )}
+              <Route path="/cart" component={() => <CardProductsPage />} />
+              <Route
+                path="/*"
+                exact
+                component={(props) => (
+                  <HomePage categoryName={activeNavName} {...props} />
+                )}
+              />
+            </Switch>
+            {this.state.showCardDropdown && <Overlay />}
+
           </Content>
         </Container>
       </ThemeProvider>

@@ -18,6 +18,7 @@ export const GET_PRODUCTS_BY_CATEGORY = gql`
         brand
         inStock
         gallery
+        description
         prices {
           currency {
             label
@@ -51,12 +52,19 @@ export const GET_CURRENCIES = gql`
 export const GET_SINGLE_PRODUCT = gql`
   query CatSingleProduct($id: String!) {
     product(id: $id) {
-      name,
-      id,
+      id
+      name
+      brand
       inStock,
       gallery,
       description,
-      category,
+      prices {
+        currency {
+          label,
+          symbol
+        },
+        amount,
+      },
       attributes {
         id,
         name,
@@ -67,14 +75,6 @@ export const GET_SINGLE_PRODUCT = gql`
           id
         }
       },
-      prices {
-        currency {
-          label,
-          symbol
-        },
-        amount,
-      },
-      brand,
     }
   }
 `;
