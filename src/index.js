@@ -8,11 +8,17 @@ import { ProductsProvider } from "./context/products";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { NavigationProvider } from "./context/navigation";
 import { CurrencyProvider } from "./context/currency";
+
+const defaultOptions = {
+  watchQuery: {
+    fetchPolicy: 'no-cache', // this resolves feedback point 5 (The jacket has the wrong attributes when added from PLP, then from PDP.)
+  },
+}
+
 export const client = new ApolloClient({
   uri: "http://localhost:4000/",
-  cache: new InMemoryCache({
-    resultCaching: true
-  }),
+  cache: new InMemoryCache(),
+  defaultOptions: defaultOptions,
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

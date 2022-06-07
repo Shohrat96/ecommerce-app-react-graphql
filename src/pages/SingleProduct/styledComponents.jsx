@@ -7,21 +7,20 @@ export const Container = styled.div`
 export const OtherImages = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 80px;
+  max-width: 100px;
+  max-height: 600px;
+  overflow-x: scroll; // for vertical scroll (flex-dir: column)
+  margin-right: 50px;
   width: 100%;
-  overflow-x: scroll;
-  max-height: 650px;
   & > div:not(:last-of-type) {
     margin-bottom: 32px;
   }
 `;
 export const SingleImageWrapper = styled.div`
-  width: 80px;
   cursor: pointer;
-  & > img {
-    max-height: 80px;
+  & > img { 
     width: 100%;
-  }
+   }
 `;
 export const SelectedImage = styled.div`
   max-width: 610px;

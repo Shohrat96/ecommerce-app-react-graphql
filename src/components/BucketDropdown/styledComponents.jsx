@@ -6,8 +6,8 @@ export const Container = styled.div`
   position: absolute;
   right: -44px;
   top: 81px;
-  width: 325px;
-  z-index: 1000;
+  width: 340px; // for feedback point 2 (Cart Overlay a bit wider in order to remove the horizontal scrollbar)
+  z-index: 1001;
   background-color: #fff;
   padding: 32px 16px;
 `;
@@ -38,7 +38,7 @@ export const Overlay = styled.div`
   top: 81px;
   bottom: 0;
   background-color: rgba(0,0,0,0.5);
-  z-index: 999;
+  z-index: 1000;
 `
 export const TotalPrice = styled.div`
   display: flex;

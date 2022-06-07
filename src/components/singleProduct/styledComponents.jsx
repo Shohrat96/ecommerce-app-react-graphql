@@ -23,9 +23,6 @@ export const Container = styled.div`
   &:hover {
     box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
   }
-  ${props => props.outStock && (
-    `pointer-events: none;`
-  )}
   &:hover ${AddToCardWrapper} {
     display: flex;
   }

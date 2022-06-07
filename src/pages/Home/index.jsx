@@ -9,7 +9,6 @@ import { GET_PRODUCTS_BY_CATEGORY } from "../../graphql/queries";
 
 class HomePage extends React.Component {
   static contextType = ProductsContext;
-
   render() {
     return (
       <Query

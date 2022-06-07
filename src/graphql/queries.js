@@ -27,13 +27,13 @@ export const GET_PRODUCTS_BY_CATEGORY = gql`
           amount
         }
         attributes {
-          id
-          name
-          type
+          id,
+          name,
+          type,
           items {
-            displayValue
-            value
-            id
+            displayValue,
+            value,
+            id,
           }
         }
       }

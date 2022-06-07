@@ -20,10 +20,7 @@ export default class SingleProduct extends React.Component {
       defaultSelectedAtributes[att.name] = att.items[0]?.id;
     });
     return (
-      <Link to={location => this.props.item.inStock && ({
-        ...location,
-        pathname: `products/${this.props.item.id}`
-      })}>
+      <Link to={`products/${this.props.item.id}`}>
         <CurrencyContext.Consumer>
           {({ activeCurrency }) => {
             const { currencySymbol, amount } = convertPrice(
@@ -59,7 +56,7 @@ export default class SingleProduct extends React.Component {
 
                   };
                   return (
-                    <Container outStock={!this.props.item.inStock}>
+                    <Container>
                       <ImgWrapper>
                         <ProductImage
                           src={this.props.item.gallery[0]}
@@ -68,7 +65,7 @@ export default class SingleProduct extends React.Component {
                         <AddToCardWrapper
                           onClick={(ev) => {
                             ev.preventDefault();
-                            addToCardHandle();
+                            this.props.item.inStock && addToCardHandle();
                           }}
                         >
                           <BucketIcon color="#fff" />

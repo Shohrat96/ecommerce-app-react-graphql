@@ -62,6 +62,9 @@ class SingleProduct extends React.Component {
     });
   };
   addToCardButtonDisabled = (fetchedProduct) => {
+    if (!fetchedProduct?.inStock) {
+      return true;
+    }
     if (fetchedProduct.attributes.length > 0) {
       if (
         fetchedProduct.attributes.some(
@@ -129,7 +132,7 @@ class SingleProduct extends React.Component {
                   onClick={
                     () => this.addToCardHandler(product)
                   }
-                  title="add to card"
+                  title={product?.inStock ? "add to card" : "out of stock"}
                   className="addToCardBtnStyles"
                 />
                 <div dangerouslySetInnerHTML={{
