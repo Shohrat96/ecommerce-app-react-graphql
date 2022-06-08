@@ -9,7 +9,7 @@ export const OtherImages = styled.div`
   flex-direction: column;
   max-width: 100px;
   max-height: 600px;
-  overflow-x: scroll; // for vertical scroll (flex-dir: column)
+  overflow: auto;
   margin-right: 50px;
   width: 100%;
   & > div:not(:last-of-type) {
